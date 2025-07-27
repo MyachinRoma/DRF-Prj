@@ -31,7 +31,3 @@ class LessonUpdateApiView(UpdateAPIView):
 class LessonDestroyApiView(DestroyAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-
-class SubscriptionAPIView(APIView):
-    serializer_class = LessonSerializer
-    queryset = Lesson.objects.all()
