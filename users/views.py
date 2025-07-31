@@ -4,8 +4,17 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.filters import OrderingFilter
 from users.models import Payment, User
-#from users.permissions import UserPermission
+
+# from users.permissions import UserPermission
 from users.serializers import PaymentSerializer, UserSerializer
+
+
+class MixinQueryset:
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if not self.request.user.is_staff:
+            queryset = queryset.filter(owner=self.request.user.pk)
+        return queryset
 
 
 class PaymentViewSet(viewsets.ModelViewSet):

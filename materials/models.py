@@ -22,7 +22,8 @@ class Course(models.Model):
         null=True,
         help_text="Загрузите превью",
     )
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -71,7 +72,8 @@ class Lesson(models.Model):
         verbose_name="ссылка на видео",
         help_text="загрузите видео",
     )
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
