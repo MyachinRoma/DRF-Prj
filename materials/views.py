@@ -38,7 +38,7 @@ class CourseViewSet(ModelViewSet):
                 IsAuthenticated,
                 ~IsModer,
             )
-        elif self.action in ["update", "retrieve"]:
+        elif self.action in ["update", "partial_update", "retrieve"]:
             self.permission_classes = (
                 IsAuthenticated,
                 IsModer | IsOwner,
