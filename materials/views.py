@@ -1,3 +1,5 @@
+from django.utils.decorators import method_decorator
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import (
     CreateAPIView,
     DestroyAPIView,
@@ -21,6 +23,12 @@ from materials.serializers import (
 from users.permissions import IsModer, IsOwner
 
 
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(
+        operation_description="description from swagger_auto_schema via method_decorator"
+    ),
+)
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     pagination_class = CustomPagination
@@ -90,6 +98,7 @@ class LessonDestroyApiView(DestroyAPIView):
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated, IsOwner | ~IsModer]
 
+
 class SubscriptionAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -105,11 +114,5 @@ class SubscriptionAPIView(APIView):
         else:
             Subscription.objects.create(user=user, course=course)
             message = "Подписка добавлена."
-        serializer = CourseSerializer(
-            course,
-            context={'request': request}
-        )
-        return Response({
-            "message": message,
-            "course": serializer.data
-        })
+        serializer = CourseSerializer(course, context={"request": request})
+        return Response({"message": message, "course": serializer.data})

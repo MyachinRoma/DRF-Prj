@@ -11,7 +11,8 @@ class CourseTestCase(APITestCase):
     def setUp(self):
         self.user = User.objects.create(email="test@test.com")
         self.course = Course.objects.create(
-            title="test_course", description="test_description")
+            title="test_course", description="test_description"
+        )
         self.lesson = Lesson.objects.create(
             title="test_lesson", courses=self.course, owner=self.user
         )
