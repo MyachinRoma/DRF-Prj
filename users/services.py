@@ -13,13 +13,13 @@ def create_stripe_product(product_name):
     )
 
 
-def create_stripe_price(payment_amount):
+def create_stripe_price(payment_amount, prod):
     """Создает цену в stripe"""
 
     return stripe.Price.create(
         currency="rub",
         unit_amount=int(payment_amount * 100),
-        product_data={"name": "Payment"},
+        product_data=prod,
     )
 
 

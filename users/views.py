@@ -39,19 +39,19 @@ class PaymentCreateAPIView(CreateAPIView):
     queryset = Payment.objects.all()
 
     def perform_create(self, serializer):
-        payment = serializer.save(owner=self.request.user)
+        payment = serializer.save()
         if payment.paid_course:
             product_name = f"{payment.paid_course.title} Course"
         else:
             product_name = "General Course"
         product = create_stripe_product(product_name)
-        price = create_stripe_price(payment.amount, product)
+        price = create_stripe_price(payment.payment_amount, product)
 
         # Создание сессии для оплаты
         session_id, payment_link = create_stripe_checkout_sessions(price)
 
         # Сохранение данных в модель Payments
-        payment.stripe_session_id = session_id
+        payment.session_id = session_id
         payment.link = payment_link
         payment.save()
 
