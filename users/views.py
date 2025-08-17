@@ -7,6 +7,11 @@ from users.models import Payment, User
 
 # from users.permissions import UserPermission
 from users.serializers import PaymentSerializer, UserSerializer
+from users.services import (
+    create_stripe_product,
+    create_stripe_price,
+    create_stripe_checkout_sessions,
+)
 
 
 class MixinQueryset:
@@ -27,6 +32,28 @@ class PaymentViewSet(viewsets.ModelViewSet):
         "payment_method",
     )
     ordering_fields = ("payment_date",)
+
+
+class PaymentCreateAPIView(CreateAPIView):
+    serializer_class = PaymentSerializer
+    queryset = Payment.objects.all()
+
+    def perform_create(self, serializer):
+        payment = serializer.save()
+        if payment.paid_course:
+            product_name = f"{payment.paid_course.title} Course"
+        else:
+            product_name = "General Course"
+        product = create_stripe_product(product_name)
+        price = create_stripe_price(payment.payment_amount, product)
+
+        # Создание сессии для оплаты
+        session_id, payment_link = create_stripe_checkout_sessions(price)
+
+        # Сохранение данных в модель Payments
+        payment.session_id = session_id
+        payment.link = payment_link
+        payment.save()
 
 
 class UserCreateAPIView(CreateAPIView):
