@@ -23,6 +23,10 @@ coverage = "^7.10.1"
 drf-yasg = "^1.21.10"
 stripe = "^12.4.0"
 forex-python = "^1.9.2"
+redis = "^6.4.0"
+celery = "^5.5.3"
+eventlet = "^0.40.2"
+django-celery-beat = "^2.8.1"
 
 
 [build-system]

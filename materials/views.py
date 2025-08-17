@@ -21,6 +21,7 @@ from materials.serializers import (
     CourseDetailSerializer,
 )
 from users.permissions import IsModer, IsOwner
+from materials.tasks import subscription_message
 
 
 @method_decorator(
@@ -61,6 +62,13 @@ class CourseViewSet(ModelViewSet):
                 ~IsModer | IsOwner,
             )
         return super().get_permissions()
+
+    def perform_update(self, serializer):
+        """Отсылает сообщение об обновлении курса подписанному пользователю"""
+        update_course = serializer.save()
+        subscriptions = Subscription.objects.filter(course=update_course)
+        for subscription in subscriptions:
+            subscription_message.delay(update_course.title, subscription.user.email)
 
 
 class LessonCreateApiView(CreateAPIView):
