@@ -1,11 +1,9 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, generics
 from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 from rest_framework.filters import OrderingFilter
 from users.models import Payment, User
-
-# from users.permissions import UserPermission
 from users.serializers import PaymentSerializer, UserSerializer
 from users.services import (
     create_stripe_product,
