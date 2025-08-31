@@ -10,10 +10,14 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 
-COPY requirements.txt ./
+# Добавляем Poetry в PATH
+ENV PATH="/root/.local/bin:${PATH}"
 
+# Копируем файлы зависимостей
+COPY pyproject.toml poetry.lock ./
 
-RUN pip install --no-cache-dir -r requirements.txt
+# Устанавливаем Python-зависимости
+RUN poetry install --no-interaction --no-ansi --only main
 
 
 COPY . .
@@ -28,6 +32,3 @@ RUN mkdir -p /app/media
 
 
 EXPOSE 8000
-
-
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
