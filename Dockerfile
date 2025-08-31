@@ -9,6 +9,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+RUN pip install poetry
 
 # Добавляем Poetry в PATH
 ENV PATH="/root/.local/bin:${PATH}"
@@ -17,7 +18,8 @@ ENV PATH="/root/.local/bin:${PATH}"
 COPY pyproject.toml poetry.lock ./
 
 # Устанавливаем Python-зависимости
-RUN poetry install --no-interaction --no-ansi --only main
+RUN poetry config virtualenvs.create false
+RUN poetry install --no-root
 
 
 COPY . .
