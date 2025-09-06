@@ -1,0 +1,36 @@
+FROM python:3.13
+
+
+WORKDIR /app
+
+
+RUN apt-get update \
+    && apt-get install -y gcc libpq-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install poetry
+
+# Добавляем Poetry в PATH
+ENV PATH="/root/.local/bin:${PATH}"
+
+# Копируем файлы зависимостей
+COPY pyproject.toml poetry.lock ./
+
+# Устанавливаем Python-зависимости
+RUN poetry config virtualenvs.create false
+RUN poetry install --no-root
+
+
+COPY . .
+
+
+ENV SECRET_KEY=django-insecure-a47-$xy53nv_=sgytl_hb0!je1sp%owu3*=l2d81t4rewa1uc^
+ENV CELERY_BROKER_URL='redis://localhost:6379'
+ENV CELERY_BACKEND='redis://localhost:6379'
+
+
+RUN mkdir -p /app/media
+
+
+EXPOSE 8000
