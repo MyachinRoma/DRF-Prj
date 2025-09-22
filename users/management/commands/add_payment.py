@@ -17,6 +17,8 @@ class Command(BaseCommand):
         for payment_data in payments:
             payment, created = Payment.objects.get_or_create(**payment_data)
             if created:
-                self.stdout.write(self.style.SUCCESS(f"Successfully added payment!"))
+                self.stdout.write(self.style.SUCCESS
+                                  ("Successfully added payment!"))
             else:
-                self.stdout.write(self.style.WARNING(f"Payment already exist!"))
+                self.stdout.write(self.style.WARNING
+                                  ("Payment already exist!"))

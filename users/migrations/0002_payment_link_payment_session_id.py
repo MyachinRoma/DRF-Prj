@@ -14,7 +14,8 @@ class Migration(migrations.Migration):
             model_name="payment",
             name="link",
             field=models.URLField(
-                blank=True, max_length=400, null=True, verbose_name="Ссылка на оплату"
+                blank=True, max_length=400, null=True,
+                verbose_name="Ссылка на оплату"
             ),
         ),
         migrations.AddField(

@@ -25,7 +25,8 @@ class UserManager(BaseUserManager):
         if not extra_fields.get("is_staff"):
             raise ValueError("Суперпользователь должен иметь is_staff=True.")
         if not extra_fields.get("is_superuser"):
-            raise ValueError("Суперпользователь должен иметь is_superuser=True.")
+            raise ValueError("Суперпользователь должен иметь "
+                             "is_superuser=True.")
 
         return self.create_user(email, password, **extra_fields)
 
@@ -74,7 +75,8 @@ class Payment(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, verbose_name="Пользователь"
     )
-    payment_date = models.DateField(default=date.today, verbose_name="Дата оплаты")
+    payment_date = models.DateField(default=date.today,
+                                    verbose_name="Дата оплаты")
     paid_course = models.ForeignKey(
         Course,
         on_delete=models.SET_NULL,
