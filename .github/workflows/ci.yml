@@ -51,8 +51,7 @@ jobs:
 
     - name: Run tests
       env:
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        DATABASE_URL: "sqlite:///test_db.sqlite3"
+        SECRET_KEY: test_secret_key
       run: |
         python manage.py test --noinput
 
