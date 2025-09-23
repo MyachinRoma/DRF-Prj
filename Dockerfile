@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.13
 
 WORKDIR /app
 
@@ -14,10 +14,9 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 
-COPY .flake8 .
 COPY . .
 
-ENV SECRET_KEY='django-insecure-i)+xv5p+0b$!q)ihq+0dweq+lus-x*fh3b5awm+_k%)vev!hb*'
+ENV SECRET_KEY='django-insecure-a47-$xy53nv_=sgytl_hb0!je1sp%owu3*=l2d81t4rewa1uc^'
 ENV CELERY_BROKER_URL='redis://localhost:6379'
 ENV CELERY_BACKEND='redis://localhost:6379'
 
