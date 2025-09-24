@@ -124,10 +124,12 @@ class LessonUpdateApiView(UpdateAPIView):
         # Ensure we return fresh values
         instance.refresh_from_db()
 
+
 class LessonDestroyApiView(DestroyAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated, IsOwner | ~IsModer]
+
 
 class LessonViewSet(ModelViewSet):
     queryset = Lesson.objects.all().order_by("id")
@@ -142,7 +144,6 @@ class LessonViewSet(ModelViewSet):
         instance = serializer.save()
         # На всякий пожарный подтянем свежие данные из БД
         instance.refresh_from_db()
-
 
 
 class SubscriptionAPIView(APIView):

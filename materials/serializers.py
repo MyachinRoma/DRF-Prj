@@ -12,18 +12,19 @@ class LessonSerializer(serializers.ModelSerializer):
         model = Lesson
         fields = ["id", "title", "course", "owner", "video_url"]
 
+
 class LessonListSerializer(ModelSerializer):
     class Meta:
         model = Lesson
         # Только то, что ждёт тест
         fields = ["id", "title", "course", "owner", "video_url"]
 
+
 class LessonDetailSerializer(ModelSerializer):
     class Meta:
         model = Lesson
         fields = ["id", "title", "course", "owner", "video_url", "description", "picture"]
         read_only_fields = ["owner"]  # ВАЖНО: здесь нет "title"
-
 
     def update(self, instance, validated_data):
         for attr, value in validated_data.items():
@@ -34,7 +35,6 @@ class LessonDetailSerializer(ModelSerializer):
         else:
             instance.save()
         return instance
-
 
 
 class CourseSerializer(serializers.ModelSerializer):
