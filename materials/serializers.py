@@ -21,13 +21,24 @@ class LessonListSerializer(ModelSerializer):
 class LessonDetailSerializer(ModelSerializer):
     class Meta:
         model = Lesson
-        # Полный набор (если нужны description/picture — тут оставляем)
         fields = ["id", "title", "course", "owner", "video_url", "description", "picture"]
-        read_only_fields = ["owner"]  # title НЕ делаем read_only
+        read_only_fields = ["owner"]  # ВАЖНО: здесь нет "title"
+
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        update_fields = list(validated_data.keys())
+        if update_fields:
+            instance.save(update_fields=update_fields)
+        else:
+            instance.save()
+        return instance
+
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    lesson = LessonSerializer(read_only=True, many=True, source="lesson_set")
+    lesson = LessonSerializer(many=True, source="lesson_set")
 
     class Meta:
         model = Course
@@ -36,7 +47,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
 class CourseDetailSerializer(serializers.ModelSerializer):
     count_of_lessons = serializers.SerializerMethodField()
-    lesson = LessonSerializer(read_only=True, many=True, source="lesson_set")
+    lesson = LessonSerializer(many=True, source="lesson_set")
     info_lessons = serializers.SerializerMethodField()
     is_subscribed = serializers.SerializerMethodField()
 

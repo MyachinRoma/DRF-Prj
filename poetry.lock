@@ -1559,6 +1559,16 @@ socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
+name = "reverse"
+version = "0.1.0"
+description = "Reverse a file"
+optional = false
+python-versions = "*"
+files = [
+    {file = "reverse-0.1.0.tar.gz", hash = "sha256:5dffd7d38ab9f580ea3e5a744498341e37caea71990c93283e622142be54b049"},
+]
+
+[[package]]
 name = "setuptools"
 version = "80.9.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
@@ -1847,4 +1857,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.13"
-content-hash = "8f1e59f8a964bf2000b0731c3cb5ad1fbb2bb0fe1221782190ba8b8bc4dd85a4"
+content-hash = "b229564902d668c2c33848a03f64ad57f75fb21769fef3e121bba056a6ee9aa5"
