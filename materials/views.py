@@ -18,7 +18,7 @@ from materials.paginations import CustomPagination
 from materials.serializers import (
     CourseSerializer,
     LessonSerializer,
-    CourseDetailSerializer,
+    CourseDetailSerializer, LessonListSerializer, LessonDetailSerializer,
 )
 from users.permissions import IsModer, IsOwner
 from materials.tasks import subscription_message
@@ -72,6 +72,17 @@ class CourseViewSet(ModelViewSet):
         for subscription in subscriptions:
             (subscription_message.delay
              (update_course.title, subscription.user.email))
+
+
+class LessonViewSet(ModelViewSet):
+    # Явно задаём порядок, чтобы убрать предупреждение пагинации
+    queryset = Lesson.objects.all().order_by("id")
+
+    def get_serializer_class(self):
+        return LessonListSerializer if self.action == "list" else LessonDetailSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class LessonCreateApiView(CreateAPIView):

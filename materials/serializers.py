@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
+
 from .models import Course, Lesson, Subscription
 from .validators import validate_links
 
@@ -8,7 +10,20 @@ class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = "__all__"
+        fields = ["id", "title", "course", "owner", "video_url"]
+
+class LessonListSerializer(ModelSerializer):
+    class Meta:
+        model = Lesson
+        # Только то, что ждёт тест
+        fields = ["id", "title", "course", "owner", "video_url"]
+
+class LessonDetailSerializer(ModelSerializer):
+    class Meta:
+        model = Lesson
+        # Полный набор (если нужны description/picture — тут оставляем)
+        fields = ["id", "title", "course", "owner", "video_url", "description", "picture"]
+        read_only_fields = ["owner"]  # title НЕ делаем read_only
 
 
 class CourseSerializer(serializers.ModelSerializer):
