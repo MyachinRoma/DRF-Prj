@@ -19,3 +19,4 @@ celery==5.5.3
 eventlet==0.40.2
 django-celery-beat==2.8.1
 flake8==7.3.0
+gunicorn
