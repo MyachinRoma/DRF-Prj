@@ -97,5 +97,24 @@ jobs:
               -e HOST=localhost \
               ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
 
+            # Настройка systemd (если сервис ещё не существует)
+            if ! systemctl is-active --quiet myapp.service; then
+              echo "[Unit]
+              Description=My App Container
+              After=docker.service
 
+              [Service]
+              ExecStart=/usr/bin/docker start -a myapp
+              ExecStop=/usr/bin/docker stop myapp
+              Restart=always
+              RestartSec=5s
+
+              [Install]
+              WantedBy=multi-user.target" | sudo tee /etc/systemd/system/myapp.service
+              sudo systemctl daemon-reload
+              sudo systemctl enable myapp.service
+            fi
+
+            # Перезапуск сервиса
+            sudo systemctl restart myapp.service
           EOF
