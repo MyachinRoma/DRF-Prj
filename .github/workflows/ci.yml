@@ -97,5 +97,5 @@ jobs:
               -e HOST=localhost \
               ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
 
-#
+
           EOF
