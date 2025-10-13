@@ -1,9 +1,15 @@
+import os
+import django
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from materials.models import Course, Lesson, Subscription
 from users.models import User
+
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")  # <-- укажи свой модуль настроек
+django.setup()
 
 
 class CourseTestCase(APITestCase):
@@ -14,7 +20,7 @@ class CourseTestCase(APITestCase):
             title="test_course", description="test_description"
         )
         self.lesson = Lesson.objects.create(
-            title="test_lesson", courses=self.course, owner=self.user
+            title="test_lesson", course=self.course, owner=self.user
         )
         self.client.force_authenticate(user=self.user)
 
@@ -96,7 +102,8 @@ class SubscriptionViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("message"), "Подписка добавлена.")
         self.assertTrue(
-            Subscription.objects.filter(user=self.user, course=self.course).exists()
+            Subscription.objects.filter
+            (user=self.user, course=self.course).exists()
         )
 
     def test_unsubscribe_from_course(self):
@@ -109,7 +116,8 @@ class SubscriptionViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("message"), "Подписка удалена.")
         self.assertFalse(
-            Subscription.objects.filter(user=self.user, course=self.course).exists()
+            Subscription.objects.filter
+            (user=self.user, course=self.course).exists()
         )
 
     def test_subscribe_to_nonexistent_course(self):

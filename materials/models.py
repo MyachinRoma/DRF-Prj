@@ -83,6 +83,7 @@ class Lesson(models.Model):
     )
 
     class Meta:
+        ordering = ["id"]
         verbose_name = "Урок"
         verbose_name_plural = "Уроки"
 
